@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "description": "intalacion \r npm install express mongoose dotenv cors bcryptjs jsonwebtoken express-rate-limit",
   "main": "index.js",
- "scripts": {
-  "start": "node src/app.js",
-  "build": "npm install --prefix ../client && npm run build --prefix ../client && rm -rf public && mv ../client/dist public"
-},
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "build": "npm install --prefix ../client && npm run build --prefix ../client && rm -rf public && mv ../client/dist public"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
