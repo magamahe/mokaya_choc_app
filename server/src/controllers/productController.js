@@ -13,14 +13,28 @@ exports.getProducts = async (req, res) => {
 // Crear un producto (Solo Admin)
 exports.createProduct = async (req, res) => {
     try {
-        const newProduct = new Product(req.body);
+        const { nombre, precio, categoria, stock, imagen } = req.body;
+
+        if (!nombre || !precio) {
+            return res.status(400).json({ msg: 'Datos inválidos' });
+        }
+
+        const newProduct = new Product({
+            nombre: nombre.trim(),
+            precio,
+            categoria,
+            stock: stock || 0,
+            imagen
+        });
+
         await newProduct.save();
         res.status(201).json(newProduct);
+
     } catch (error) {
-        res.status(400).json({ msg: 'Error al crear el producto', error });
+        console.error(error);
+        res.status(400).json({ msg: 'Error al crear producto' });
     }
 };
-
 // Actualizar stock o datos (Solo Admin)
 exports.updateProduct = async (req, res) => {
     try {

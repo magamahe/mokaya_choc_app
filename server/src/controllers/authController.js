@@ -2,53 +2,99 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-// REGISTRO
+// =======================
+// REGISTER
+// =======================
 exports.register = async (req, res) => {
     try {
-        const { nombre, email, password, role } = req.body;
+        let { nombre, email, password } = req.body;
+
+        // Validación básica
+        if (!nombre || !email || !password) {
+            return res.status(400).json({ msg: 'Todos los campos son obligatorios' });
+        }
+
+        email = email.toLowerCase().trim();
 
         let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ msg: 'El usuario ya existe' });
+        if (user) {
+            return res.status(400).json({ msg: 'El usuario ya existe' });
+        }
 
-        user = new User({ nombre, email, password, role });
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        user = new User({
+            nombre,
+            email,
+            password: hashedPassword,
+            role: 'user' // Por defecto, todos los nuevos usuarios son "user"
+        });
 
         await user.save();
 
-        const payload = { user: { id: user.id, role: user.role } };
+        const payload = {
+            user: { id: user.id, role: user.role }
+        };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' }, (err, token) => {
-            if (err) throw err;
-            res.status(201).json({
-                token,
-                user: { id: user.id, nombre: user.nombre, role: user.role }
-            });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: '8h'
+        });
+
+        res.status(201).json({
+            token,
+            user: { id: user.id, nombre: user.nombre, role: user.role }
         });
 
     } catch (error) {
-        res.status(500).send('Error al registrar usuario');
+        console.error(error);
+        res.status(500).json({ msg: 'Error en el servidor' });
     }
 };
+
+// =======================
 // LOGIN
+// =======================
 exports.login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        let { email, password } = req.body;
 
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ msg: 'Credenciales inválidas' });
+        // Validación
+        if (!email || !password) {
+            return res.status(400).json({ msg: 'Datos incompletos' });
+        }
+
+        email = email.toLowerCase().trim();
+
+        const user = await User.findOne({ email }).select('+password');
+        if (!user) {
+            return res.status(400).json({ msg: 'Credenciales inválidas' });
+        }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Credenciales inválidas' });
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'Credenciales inválidas' });
+        }
 
-        const payload = { user: { id: user.id, role: user.role } };
+        // Simular un pequeño retraso para mejorar la experiencia de usuario
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' }, (err, token) => {
-            if (err) throw err;
-            res.json({ 
-                token,
-                user: { id: user.id, nombre: user.nombre, role: user.role }
-            });
+        const payload = {
+            user: { id: user.id, role: user.role }
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: '8h'
         });
+
+        res.json({
+            token,
+            user: { id: user.id, nombre: user.nombre, role: user.role }
+        });
+
     } catch (error) {
-        res.status(500).send('Error en el servidor');
+        console.error(error);
+        res.status(500).json({ msg: 'Error en el servidor' });
     }
 };

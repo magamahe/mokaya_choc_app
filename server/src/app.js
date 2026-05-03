@@ -10,37 +10,57 @@ const app = express();
 // DB
 connectDB();
 
-// RATE LIMIT
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Demasiadas peticiones desde esta IP'
+// =========================
+// RATE LIMIT (SOLO LOGIN)
+// =========================
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: process.env.NODE_ENV === 'production' ? 10 : 1000, 
+  message: 'Demasiados intentos de login. Intentá más tarde.',
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
+// =========================
 // MIDDLEWARES
+// =========================
 app.use(cors());
 app.use(express.json());
-app.use(limiter);
 
-// API
+// =========================
+// API ROUTES
+// =========================
+
+// Login solo protegido
+app.use('/api/auth/login', loginLimiter);
+
+// Rutas normales (sin límite global)
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 
+// =========================
 // TEST API
+// =========================
 app.get('/api', (req, res) => {
   res.send('API funcionando 🍫');
 });
 
-
+// =========================
 // SERVIR FRONTEND
+// =========================
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Cualquier ruta que no sea /api, servir el index.html para que React maneje el routing
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
-// PORT 
+
+// =========================
+//  SERVER
+// =========================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server en puerto ${PORT}`));
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server en puerto ${PORT}`);
+});
