@@ -13,6 +13,13 @@ import {
 
 import logoMokaya from '../assets/logo.webp'; 
 
+// Función para el scroll preciso (fuera del componente)
+const scrollWithOffset = (el) => {
+  const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
+  const yOffset = -80; 
+  window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+};
+
 const Navbar = ({ onCartClick }) => {
   const { darkMode, toggleTheme, theme } = useMokayaTheme();
   const { cartCount } = useCart();
@@ -31,9 +38,18 @@ const Navbar = ({ onCartClick }) => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 px-6 py-2 transition-all duration-300"
-      style={{ backgroundColor: `${theme.background}ee`, backdropFilter: 'blur(10px)', borderBottom: `1px solid ${theme.primary}22` }}>
-      
+    <nav 
+      className="sticky top-0 z-50 px-6 py-2 transition-all duration-300"
+      style={{ 
+        backgroundColor: `${theme.background}ee`, 
+        backdropFilter: 'blur(10px)', 
+        WebkitBackdropFilter: 'blur(10px)',
+        borderBottom: `1px solid ${theme.primary}22`,
+        transform: 'translateZ(0)', 
+        WebkitTransform: 'translateZ(0)',
+        willChange: 'transform'
+      }}
+    >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         
         {/* LOGO */}
@@ -41,7 +57,7 @@ const Navbar = ({ onCartClick }) => {
           <img src={logoMokaya} alt="Logo" className="h-10 md:h-14" style={{ filter: darkMode ? 'invert(1) brightness(2)' : 'none' }} />
         </Link>
 
-        {/* TÍTULO CENTRAL (Solo en Panel) */}
+        {/* TÍTULO CENTRAL (Panel) */}
         {isPanelActive && (
           <div className="flex-1 flex justify-center">
             <span className="font-bold uppercase tracking-widest text-[9px] md:text-[11px] opacity-70" style={{ color: theme.text }}>
@@ -50,11 +66,18 @@ const Navbar = ({ onCartClick }) => {
           </div>
         )}
 
-        {/* NAVEGACIÓN DESKTOP (Solo si NO es panel) */}
+        {/* NAVEGACIÓN DESKTOP */}
         {!isPanelActive && (
           <div className="hidden md:flex items-center space-x-7">
             {navLinks.map((link) => (
-              <HashLink smooth key={link.name} to={link.path} className="font-medium uppercase tracking-widest text-[10px]" style={{ color: theme.text }}>
+              <HashLink 
+                smooth 
+                key={link.name} 
+                to={link.path} 
+                scroll={el => scrollWithOffset(el)}
+                className="font-medium uppercase tracking-widest text-[10px]" 
+                style={{ color: theme.text }}
+              >
                 {link.name}
               </HashLink>
             ))}
@@ -84,17 +107,19 @@ const Navbar = ({ onCartClick }) => {
                 </IconButton>
               )}
 
-              {/* Usuario Desktop */}
-              {user ? (
-                <div className="hidden md:flex items-center ml-2 gap-2">
-                  <span className="text-[11px] font-bold italic" style={{ color: theme.text }}>Hola, {user.nombre?.split(' ')[0]}</span>
-                  <IconButton onClick={() => { logout(); navigate('/'); }} size="small" style={{ color: theme.text, opacity: 0.6 }}><LogoutIcon fontSize="inherit"/></IconButton>
-                </div>
-              ) : (
-                <Button component={Link} to="/login" variant="contained" className="hidden md:flex" style={{ backgroundColor: theme.primary, color: '#fff', borderRadius: '20px', fontSize: '10px' }}>Entrar</Button>
-              )}
+              {/* Usuario Desktop: Oculto en móvil */}
+              <div className="hidden md:block">
+                {user ? (
+                  <div className="flex items-center ml-2 gap-2">
+                    <span className="text-[11px] font-bold italic" style={{ color: theme.text }}>Hola, {user.nombre?.split(' ')[0]}</span>
+                    <IconButton onClick={() => { logout(); navigate('/'); }} size="small" style={{ color: theme.text, opacity: 0.6 }}><LogoutIcon fontSize="inherit"/></IconButton>
+                  </div>
+                ) : (
+                  <Button component={Link} to="/login" variant="contained" style={{ backgroundColor: theme.primary, color: '#fff', borderRadius: '20px', fontSize: '10px' }}>Entrar</Button>
+                )}
+              </div>
 
-              {/* Menú Hamburguesa Mobile */}
+              {/* Botón Menú Mobile */}
               <div className="md:hidden">
                 <IconButton onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{ color: theme.text }}>
                   {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
@@ -103,27 +128,30 @@ const Navbar = ({ onCartClick }) => {
             </>
           )}
         </div>
-      </div>
+      </div> {/* Aquí cerramos el div max-w-7xl */}
 
       {/* MENÚ MÓVIL DESPLEGABLE */}
       {!isPanelActive && mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full p-8 space-y-6 flex flex-col shadow-2xl animate-fade-in" style={{ backgroundColor: theme.background }}>
+        <div className="md:hidden absolute top-full left-0 w-full p-8 space-y-6 flex flex-col shadow-2xl" style={{ backgroundColor: theme.background }}>
           {navLinks.map((link) => (
-            <HashLink smooth key={link.name} to={link.path} onClick={() => setMobileMenuOpen(false)} className="text-lg font-semibold uppercase tracking-widest" style={{ color: theme.text }}>
+            <HashLink 
+              smooth 
+              key={link.name} 
+              to={link.path} 
+              scroll={el => scrollWithOffset(el)}
+              onClick={() => setMobileMenuOpen(false)} 
+              className="text-lg font-semibold uppercase tracking-widest" 
+              style={{ color: theme.text }}
+            >
               {link.name}
             </HashLink>
           ))}
           
-          {/* Aquí agregamos los links al panel en móvil */}
           {user?.role === 'client' && (
-            <Link to="/mis-pedidos" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold uppercase" style={{ color: theme.primary }}>
-              Mis Pedidos
-            </Link>
+            <Link to="/mis-pedidos" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold uppercase" style={{ color: theme.primary }}>Mis Pedidos</Link>
           )}
           {user?.role === 'admin' && (
-            <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold uppercase" style={{ color: theme.primary }}>
-              Panel Admin
-            </Link>
+            <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold uppercase" style={{ color: theme.primary }}>Panel Admin</Link>
           )}
 
           <div className="pt-4 border-t" style={{ borderColor: `${theme.primary}22` }}>
