@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "client"], // Solo estos dos valores son válidos
-      default: "client",
+      enum: ["admin", "user"], // Solo estos dos valores son válidos
+      default: "user",
     },
   },
   { timestamps: true },
