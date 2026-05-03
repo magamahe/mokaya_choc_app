@@ -13,28 +13,39 @@ exports.getProducts = async (req, res) => {
 // Crear un producto (Solo Admin)
 exports.createProduct = async (req, res) => {
     try {
-        const { nombre, precio, categoria, stock, imagen } = req.body;
+        let { nombre, precio, categoria, stock, imagen, descripcion } = req.body;
 
-        if (!nombre || !precio) {
-            return res.status(400).json({ msg: 'Datos inválidos' });
+        // 🔥 VALIDACIONES REALES
+        if (!nombre || !precio || !categoria) {
+            return res.status(400).json({
+                msg: 'Faltan campos obligatorios (nombre, precio, categoria)'
+            });
         }
 
         const newProduct = new Product({
             nombre: nombre.trim(),
-            precio,
+            precio: Number(precio),
             categoria,
-            stock: stock || 0,
-            imagen
+            stock: Number(stock) || 0,
+            imagen,
+            descripcion
         });
 
         await newProduct.save();
+
         res.status(201).json(newProduct);
 
     } catch (error) {
-        console.error(error);
-        res.status(400).json({ msg: 'Error al crear producto' });
+        console.log("🔥 ERROR REAL MONGOOSE:", error);
+
+        res.status(400).json({
+            msg: 'Error al crear producto',
+            error: error.message,   // 👈 CLAVE
+            details: error.errors
+        });
     }
 };
+
 // Actualizar stock o datos (Solo Admin)
 exports.updateProduct = async (req, res) => {
     try {

@@ -1,5 +1,5 @@
 import React from "react";
-import { HashLink } from 'react-router-hash-link'; // Para que el scroll funcione
+import { HashLink } from "react-router-hash-link"; // Para que el scroll funcione
 import { useMokayaTheme } from "../context/ThemeContext";
 
 // Iconos para Redes
@@ -8,10 +8,10 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 // Iconos para el Menú (Nuevos)
-import HomeIcon from '@mui/icons-material/HomeOutlined';
-import StorefrontIcon from '@mui/icons-material/StorefrontOutlined';
-import InfoIcon from '@mui/icons-material/InfoOutlined';
-import ContactSupportIcon from '@mui/icons-material/ContactSupportOutlined';
+import HomeIcon from "@mui/icons-material/HomeOutlined";
+import StorefrontIcon from "@mui/icons-material/StorefrontOutlined";
+import InfoIcon from "@mui/icons-material/InfoOutlined";
+import ContactSupportIcon from "@mui/icons-material/ContactSupportOutlined";
 
 import logoMokaya from "../assets/logo.webp";
 
@@ -20,10 +20,22 @@ const Footer = () => {
 
   // Definimos los links con sus iconos y rutas correspondientes
   const footerLinks = [
-    { name: 'Inicio', path: '/#top', icon: <HomeIcon fontSize="inherit" /> },
-    { name: 'Productos', path: '/#catalogo', icon: <StorefrontIcon fontSize="inherit" /> },
-    { name: 'Nosotros', path: '/#nosotros', icon: <InfoIcon fontSize="inherit" /> },
-    { name: 'Contacto', path: '/#contacto', icon: <ContactSupportIcon fontSize="inherit" /> },
+    { name: "Inicio", path: "/#top", icon: <HomeIcon fontSize="inherit" /> },
+    {
+      name: "Productos",
+      path: "/#catalogo",
+      icon: <StorefrontIcon fontSize="inherit" />,
+    },
+    {
+      name: "Nosotros",
+      path: "/#nosotros",
+      icon: <InfoIcon fontSize="inherit" />,
+    },
+    {
+      name: "Contacto",
+      path: "/#contacto",
+      icon: <ContactSupportIcon fontSize="inherit" />,
+    },
   ];
 
   return (
@@ -36,7 +48,6 @@ const Footer = () => {
       }}
     >
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 text-center md:text-left">
-        
         {/* COLUMNA 1: LOGO Y FILOSOFÍA */}
         <div className="space-y-6">
           <img
@@ -49,8 +60,9 @@ const Footer = () => {
             className="text-sm leading-relaxed italic font-light"
             style={{ color: theme.text, opacity: 0.7 }}
           >
-            "Creamos experiencias sensoriales a través del cacao de origen. 
-            Cada pieza es una obra de arte diseñada para quienes aprecian el detalle."
+            "Creamos experiencias sensoriales a través del cacao de origen. Cada
+            pieza es una obra de arte diseñada para quienes aprecian el
+            detalle."
           </p>
         </div>
 
@@ -64,8 +76,13 @@ const Footer = () => {
           </h4>
           <ul className="space-y-4">
             {footerLinks.map((item) => (
-              <li key={item.name} className="flex items-center justify-center md:justify-start gap-3">
-                <span style={{ color: theme.primary, fontSize: '16px' }}>{item.icon}</span>
+              <li
+                key={item.name}
+                className="flex items-center justify-center md:justify-start gap-3"
+              >
+                <span style={{ color: theme.primary, fontSize: "16px" }}>
+                  {item.icon}
+                </span>
                 <HashLink
                   smooth
                   to={item.path}
@@ -89,23 +106,36 @@ const Footer = () => {
               Seguinos
             </h4>
             <div className="flex justify-center md:justify-start space-x-6">
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" 
-                 className="hover:scale-110 transition-transform" style={{ color: theme.text }}>
+              <a
+                href="https://www.instagram.com/mokaya_choc/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:scale-110 transition-transform"
+                style={{ color: theme.primary }}
+              >
                 <InstagramIcon fontSize="small" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer"
-                 className="hover:scale-110 transition-transform" style={{ color: theme.text }}>
-                <FacebookIcon fontSize="small" />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer"
-                 className="hover:scale-110 transition-transform" style={{ color: theme.text }}>
+              
+              <a
+                href="https://www.linkedin.com/in/magamahe"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Mi LinkedIn"
+                className="hover:scale-110 transition-transform"
+                style={{ color: theme.primary }}
+              >
                 <LinkedInIcon fontSize="small" />
               </a>
             </div>
           </div>
 
-          <div className="space-y-2 text-xs tracking-wide opacity-60" style={{ color: theme.text }}>
-            <p className="font-bold" style={{ color: theme.primary }}>San Rafael, Mendoza</p>
+          <div
+            className="space-y-2 text-xs tracking-wide opacity-60"
+            style={{ color: theme.text }}
+          >
+            <p className="font-bold" style={{ color: theme.primary }}>
+              San Rafael, Mendoza
+            </p>
             <p>info@mokaya.com.ar</p>
           </div>
         </div>

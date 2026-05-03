@@ -19,41 +19,43 @@ const Catalog = () => {
   const [busqueda, setBusqueda] = useState("");
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  let mounted = true;
+  useEffect(() => {
+    let mounted = true;
 
-  const cargarDatos = async () => {
-    try {
-      setLoading(true);
+    const cargarDatos = async () => {
+      try {
+        setLoading(true);
 
-      const [resProds, resCats] = await Promise.all([
-        api.get("/products"),
-        api.get("/categories"),
-      ]);
+        const [resProds, resCats] = await Promise.all([
+          api.get("/products"),
+          api.get("/categories"),
+        ]);
 
-      if (!mounted) return;
+        if (!mounted) return;
 
-      setProductos(resProds.data);
-      setCategorias(["Todos", ...resCats.data.map((c) => c.nombre)]);
-    } catch (error) {
-      console.error("Error al conectar con la chocolatería:", error);
-    } finally {
-      if (mounted) setLoading(false);
-    }
-  };
+        setProductos(resProds.data);
+        setCategorias(["Todos", ...resCats.data.map((c) => c.nombre)]);
+      } catch (error) {
+        console.error("Error al conectar con la chocolatería:", error);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
 
-  cargarDatos();
+    cargarDatos();
 
-  return () => {
-    mounted = false;
-  };
-}, []);
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleAddToCart = (e, prod) => {
     e.stopPropagation();
     if (prod.stock <= 0) return;
     if (!user) {
-      alert("Para adquirir nuestras colecciones de autor, por favor inicia sesión.");
+      alert(
+        "Para adquirir nuestras colecciones de autor, por favor inicia sesión.",
+      );
       navigate("/login");
       return;
     }
@@ -62,7 +64,8 @@ useEffect(() => {
 
   const productosFiltrados = productos.filter((prod) => {
     const nombreCat = prod.categoria?.nombre || "Sin Categoría";
-    const coincideCategoria = categoriaActiva === "Todos" || nombreCat === categoriaActiva;
+    const coincideCategoria =
+      categoriaActiva === "Todos" || nombreCat === categoriaActiva;
     const coincideBusqueda =
       prod.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       prod.descripcion.toLowerCase().includes(busqueda.toLowerCase());
@@ -73,32 +76,58 @@ useEffect(() => {
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.9, y: 20 },
     visible: { opacity: 1, scale: 1, y: 0 },
-    exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } }
+    exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
   };
 
-  if (loading) return <div className="text-center py-40 opacity-50 italic">Sincronizando bodega...</div>;
+  if (loading)
+    return (
+      <div className="text-center py-40 opacity-50 italic">
+        Sincronizando bodega...
+      </div>
+    );
 
   return (
-    <section className="py-24 px-6 md:px-12" style={{ backgroundColor: theme.background }}>
+    <section
+      className="py-24 px-6 md:px-12"
+      style={{ backgroundColor: theme.background }}
+    >
       <div className="max-w-7xl mx-auto space-y-16">
-        
         {/* ENCABEZADO */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-10">
-          <div className="space-y-6 text-center md:text-left">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-10">
+          {/* Contenedor de Títulos */}
+          <div className="space-y-6 text-center md:text-left w-full md:w-auto">
+            {/* Antetítulo (Línea + Texto) */}
             <div className="flex items-center justify-center md:justify-start space-x-3">
-              <div className="w-10 h-[2px]" style={{ backgroundColor: theme.primary }}></div>
-              <span className="uppercase tracking-[0.3em] text-xs font-bold" style={{ color: theme.primary }}>
+              <div
+                className="w-10 h-[2px]"
+                style={{ backgroundColor: theme.primary }}
+              ></div>
+              <span
+                className="uppercase tracking-[0.3em] text-xs font-bold"
+                style={{ color: theme.primary }}
+              >
                 Boutique Online
               </span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-bold leading-tight" 
-                style={{ color: theme.text, fontFamily: "'Playfair Display', serif" }}>
+
+            {/* Título Principal */}
+            <h2
+              className="text-5xl md:text-6xl font-bold leading-tight"
+              style={{
+                color: theme.text,
+                fontFamily: "'Playfair Display', serif",
+              }}
+            >
               Nuestras <span style={{ color: theme.primary }}>Piezas</span>
             </h2>
           </div>
 
+          {/* Buscador */}
           <div className="relative w-full md:w-80 group">
-            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" style={{ color: theme.text }} />
+            <SearchIcon
+              className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30"
+              style={{ color: theme.text }}
+            />
             <input
               type="text"
               placeholder="Buscar sabor..."
@@ -111,17 +140,29 @@ useEffect(() => {
         </div>
 
         {/* FILTROS */}
-        <div className="flex flex-wrap justify-center md:justify-start gap-3 border-b pb-8" style={{ borderColor: `${theme.primary}15` }}>
+        <div
+          className="flex flex-wrap justify-center md:justify-start gap-3 border-b pb-8"
+          style={{ borderColor: `${theme.primary}15` }}
+        >
           {categorias.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategoriaActiva(cat)}
               className="px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all border"
               style={{
-                backgroundColor: categoriaActiva === cat ? theme.primary : "transparent",
-                color: categoriaActiva === cat ? (darkMode ? "#000" : "#fff") : theme.text,
-                borderColor: categoriaActiva === cat ? theme.primary : `${theme.primary}22`,
-                opacity: categoriaActiva === cat ? 1 : 0.6
+                backgroundColor:
+                  categoriaActiva === cat ? theme.primary : "transparent",
+                color:
+                  categoriaActiva === cat
+                    ? darkMode
+                      ? "#000"
+                      : "#fff"
+                    : theme.text,
+                borderColor:
+                  categoriaActiva === cat
+                    ? theme.primary
+                    : `${theme.primary}22`,
+                opacity: categoriaActiva === cat ? 1 : 0.6,
               }}
             >
               {cat}
@@ -130,7 +171,7 @@ useEffect(() => {
         </div>
 
         {/* GRILLA CON ANIMACIÓN FLUIDA */}
-        <motion.div 
+        <motion.div
           layout // Este layout en el padre ayuda a que la grilla entera se ajuste
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 min-h-[400px]"
         >
@@ -147,12 +188,12 @@ useEffect(() => {
                   type: "spring",
                   stiffness: 260,
                   damping: 25,
-                  mass: 1
+                  mass: 1,
                 }}
                 className="group flex flex-col h-full rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500"
-                style={{ 
+                style={{
                   backgroundColor: darkMode ? "#1a1a1a" : "#fff",
-                  border: `1px solid ${theme.primary}15`
+                  border: `1px solid ${theme.primary}15`,
                 }}
               >
                 {/* ÁREA DE IMAGEN */}
@@ -162,9 +203,11 @@ useEffect(() => {
                       SOLD OUT
                     </div>
                   )}
-                  
-                  <div className="absolute top-4 right-4 z-20 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest shadow-sm"
-                       style={{ color: theme.primary }}>
+
+                  <div
+                    className="absolute top-4 right-4 z-20 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest shadow-sm"
+                    style={{ color: theme.primary }}
+                  >
                     {prod.categoria?.nombre}
                   </div>
 
@@ -176,20 +219,40 @@ useEffect(() => {
                 </div>
 
                 {/* ÁREA DE INFORMACIÓN */}
-                <div className="p-6 flex flex-col flex-grow space-y-4" 
-                     style={{ backgroundColor: darkMode ? "#121212" : `${theme.primary}08` }}>
-                  
+                <div
+                  className="p-6 flex flex-col flex-grow space-y-4"
+                  style={{
+                    backgroundColor: darkMode
+                      ? "#121212"
+                      : `${theme.primary}08`,
+                  }}
+                >
                   <div className="flex-grow space-y-2">
-                    <h3 className="text-xl font-bold" style={{ color: theme.text, fontFamily: "'Playfair Display', serif" }}>
+                    <h3
+                      className="text-xl font-bold"
+                      style={{
+                        color: theme.text,
+                        fontFamily: "'Playfair Display', serif",
+                      }}
+                    >
                       {prod.nombre}
                     </h3>
-                    <p className="text-xs opacity-60 leading-relaxed line-clamp-4" style={{ color: theme.text }}>
+                    <p
+                      className="text-xs opacity-60 leading-relaxed line-clamp-4"
+                      style={{ color: theme.text }}
+                    >
                       {prod.descripcion}
                     </p>
                   </div>
 
-                  <div className="flex justify-between items-center pt-4 border-t" style={{ borderColor: `${theme.primary}15` }}>
-                    <span className="text-2xl font-light" style={{ color: theme.primary }}>
+                  <div
+                    className="flex justify-between items-center pt-4 border-t"
+                    style={{ borderColor: `${theme.primary}15` }}
+                  >
+                    <span
+                      className="text-2xl font-light"
+                      style={{ color: theme.primary }}
+                    >
                       ${prod.precio.toLocaleString()}
                     </span>
 
@@ -197,10 +260,10 @@ useEffect(() => {
                       <button
                         disabled={prod.stock <= 0}
                         className="p-3 rounded-2xl transition-all active:scale-95 shadow-md disabled:opacity-30"
-                        style={{ 
-                          backgroundColor: theme.primary, 
+                        style={{
+                          backgroundColor: theme.primary,
                           color: darkMode ? "#000" : "#fff",
-                          cursor: prod.stock <= 0 ? 'not-allowed' : 'pointer'
+                          cursor: prod.stock <= 0 ? "not-allowed" : "pointer",
                         }}
                         onClick={(e) => handleAddToCart(e, prod)}
                       >
@@ -220,9 +283,9 @@ useEffect(() => {
 
         {/* FEEDBACK SIN RESULTADOS */}
         {productosFiltrados.length === 0 && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="text-center py-32 opacity-30 italic font-serif text-2xl"
           >
             No encontramos lo que buscas en nuestra cava...
