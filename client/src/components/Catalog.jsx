@@ -95,9 +95,9 @@ const Catalog = () => {
         {/* ENCABEZADO */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-10">
           {/* Contenedor de Títulos */}
-          <div className="space-y-6 text-center md:text-left w-full md:w-auto">
+          <div className="space-y-6 text-left w-full md:w-auto">
             {/* Antetítulo (Línea + Texto) */}
-            <div className="flex items-center justify-center md:justify-start space-x-3">
+            <div className="flex items-center justify-start gap-3">
               <div
                 className="w-10 h-[2px]"
                 style={{ backgroundColor: theme.primary }}
