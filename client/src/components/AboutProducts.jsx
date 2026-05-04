@@ -13,11 +13,12 @@ const AboutProducts = () => {
 
   return (
     <section
-      className="py-20 px-4 md:px-12 overflow-hidden"
+      className="py-12 md:py-20 px-4 md:px-12 overflow-hidden"
       style={{ backgroundColor: theme.background }}
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        {/* TEXTO */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
+        
+        {/* 1. TEXTO (Arriba en mobile, Izquierda en desktop) */}
         <div className="space-y-6">
           <div className="flex items-center space-x-2">
             <div
@@ -71,30 +72,20 @@ const AboutProducts = () => {
           </div>
         </div>
 
-        {/* COLLAGE PREMIUM */}
+        {/* 2. COLLAGE (Abajo en mobile, Derecha en desktop) */}
         <div className="w-full flex justify-center">
-          {/* TARJETA MOBILE + CONTENEDOR DESKTOP */}
-          <div
-            className="
-  w-full
-  md:max-w-none
-  bg-transparent
-  p-0
-"
-          >
-            {/* GRID */}
+          <div className="w-full">
             <div
               className="
-              grid
-              grid-cols-3
-              grid-rows-3
-              gap-2 md:gap-3
-              aspect-square
-              md:min-h-[500px]
-            "
+                grid 
+                grid-cols-3 
+                grid-rows-3 
+                gap-2 md:gap-4
+                h-[380px] sm:h-[450px] md:h-[600px]
+              "
             >
-              {/* GRANDE */}
-              <div className="col-span-2 row-span-2 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
+              {/* TABLETA (GRANDE) */}
+              <div className="col-span-2 row-span-2 rounded-2xl md:rounded-[30px] overflow-hidden shadow-lg transition-transform duration-500 hover:scale-[1.02]">
                 <img
                   src={fotoTableta}
                   alt="Tableta"
@@ -102,8 +93,8 @@ const AboutProducts = () => {
                 />
               </div>
 
-              {/* VERTICAL */}
-              <div className="col-span-1 row-span-2 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
+              {/* CONEJO (VERTICAL) */}
+              <div className="col-span-1 row-span-2 rounded-2xl md:rounded-[30px] overflow-hidden shadow-lg transition-transform duration-500 hover:scale-[1.02]">
                 <img
                   src={fotoConejo}
                   alt="Conejo"
@@ -111,8 +102,8 @@ const AboutProducts = () => {
                 />
               </div>
 
-              {/* PEQUEÑA */}
-              <div className="col-span-1 row-span-1 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
+              {/* TRUFAS (PEQUEÑA) */}
+              <div className="col-span-1 row-span-1 rounded-2xl md:rounded-[30px] overflow-hidden shadow-lg transition-transform duration-500 hover:scale-[1.02]">
                 <img
                   src={fotoTrufas}
                   alt="Trufas"
@@ -120,8 +111,8 @@ const AboutProducts = () => {
                 />
               </div>
 
-              {/* HORIZONTAL */}
-              <div className="col-span-2 row-span-1 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
+              {/* BOMBONES (HORIZONTAL) */}
+              <div className="col-span-2 row-span-1 rounded-2xl md:rounded-[30px] overflow-hidden shadow-lg transition-transform duration-500 hover:scale-[1.02]">
                 <img
                   src={fotoBombones}
                   alt="Bombones"
@@ -130,7 +121,6 @@ const AboutProducts = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
