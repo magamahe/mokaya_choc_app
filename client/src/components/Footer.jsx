@@ -136,7 +136,7 @@ const Footer = () => {
             <p className="font-bold" style={{ color: theme.primary }}>
               San Rafael, Mendoza
             </p>
-            <p>info@mokaya.com.ar</p>
+            <p>magamahe@gmail.com</p>
           </div>
         </div>
       </div>
