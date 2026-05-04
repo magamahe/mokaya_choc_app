@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="./client/public/readme.png" alt="MOKAYA Banner" width="100%">
+</p>
 # Mokaya -- Full Stack E-commerce
 
 **Mokaya** es una plataforma de e-commerce de chocolates de autor,
@@ -89,6 +92,7 @@ Frontend (React + Vite) ↓ Backend (Node.js + Express) ↓ MongoDB Atlas
 
 ## Backend estructura
 
+```bash
 src/ 
 ├── config/ 
 ├── controllers/ 
@@ -96,6 +100,7 @@ src/
 ├── models/ 
 ├── routes/ 
 └── app.js
+```
 
 ------------------------------------------------------------------------
 
@@ -143,3 +148,8 @@ npm run build npm start
 María Gabriela Martínez H. Data Analyst & Full Stack Developer
 
 ------------------------------------------------------------------------
+Proyecto desarrollado como trabajo final de la cátedra **Back-End en ADA**
+
+<p align="center">
+  <img src="src/assets/images/readme/adalogo.png" width="80"/>
+</p>
