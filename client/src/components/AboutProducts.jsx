@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import { useMokayaTheme } from "../context/ThemeContext";
 
-// Fotos
+// Importamos las fotos
 import fotoBombones from "../assets/Bombones.webp";
 import fotoConejo from "../assets/conejo.webp";
 import fotoTrufas from "../assets/trufas.webp";
@@ -13,11 +13,12 @@ const AboutProducts = () => {
 
   return (
     <section
-      className="py-20 px-4 md:px-12 overflow-hidden"
+      className="py-20 px-6 md:px-12 overflow-hidden"
       style={{ backgroundColor: theme.background }}
     >
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        {/* TEXTO */}
+        
+        {/* COLUMNA IZQUIERDA */}
         <div className="space-y-6">
           <div className="flex items-center space-x-2">
             <div
@@ -71,65 +72,45 @@ const AboutProducts = () => {
           </div>
         </div>
 
-        {/* COLLAGE PREMIUM */}
-        <div className="w-full flex justify-center">
-          {/* TARJETA MOBILE + CONTENEDOR DESKTOP */}
-          <div
-            className="
-  w-full
-  md:max-w-none
-  bg-transparent
-  p-0
-"
-          >
-            {/* GRID */}
-            <div
-              className="
-              grid
-              grid-cols-3
-              grid-rows-3
-              gap-2 md:gap-3
-              aspect-square
-              md:min-h-[500px]
-            "
-            >
-              {/* GRANDE */}
-              <div className="col-span-2 row-span-2 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
-                <img
-                  src={fotoTableta}
-                  alt="Tableta"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* VERTICAL */}
-              <div className="col-span-1 row-span-2 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
-                <img
-                  src={fotoConejo}
-                  alt="Conejo"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* PEQUEÑA */}
-              <div className="col-span-1 row-span-1 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
-                <img
-                  src={fotoTrufas}
-                  alt="Trufas"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* HORIZONTAL */}
-              <div className="col-span-2 row-span-1 rounded-[16px] md:rounded-[30px] overflow-hidden shadow-md md:shadow-lg transition-transform duration-500 md:hover:scale-[1.02]">
-                <img
-                  src={fotoBombones}
-                  alt="Bombones"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+        {/* COLUMNA DERECHA */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
+          
+          {/* GRANDE */}
+          <div className="col-span-2 md:col-span-2 md:row-span-2 rounded-[20px] md:rounded-[30px] overflow-hidden shadow-lg">
+            <img
+              src={fotoTableta}
+              alt="Tableta"
+              className="w-full h-full object-cover"
+            />
           </div>
+
+          {/* VERTICAL */}
+          <div className="col-span-1 md:row-span-2 rounded-[20px] md:rounded-[30px] overflow-hidden shadow-lg">
+            <img
+              src={fotoConejo}
+              alt="Conejo"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* PEQUEÑA */}
+          <div className="col-span-1 rounded-[20px] md:rounded-[30px] overflow-hidden shadow-lg">
+            <img
+              src={fotoTrufas}
+              alt="Trufas"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* HORIZONTAL */}
+          <div className="col-span-2 md:col-span-2 rounded-[20px] md:rounded-[30px] overflow-hidden shadow-lg">
+            <img
+              src={fotoBombones}
+              alt="Bombones"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
         </div>
       </div>
     </section>
