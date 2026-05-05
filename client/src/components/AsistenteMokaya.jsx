@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useMokayaTheme } from "../context/ThemeContext";
 
 const AsistenteMokaya = () => {
+  const { theme } = useMokayaTheme();
+
   const [mensaje, setMensaje] = useState("");
   const [chat, setChat] = useState([]);
   const [cargando, setCargando] = useState(false);
@@ -14,23 +17,28 @@ const AsistenteMokaya = () => {
     });
   }, [chat]);
 
-  // Animación escritura tipo ChatGPT
+  // Animación escritura tipo ChatGPT (sin leaks)
   const escribirRespuesta = (textoCompleto) => {
     let i = 0;
+
     const intervalo = setInterval(() => {
       setChat((prev) => {
         const copia = [...prev];
         copia[copia.length - 1].texto = textoCompleto.slice(0, i);
         return copia;
       });
+
       i++;
-      if (i > textoCompleto.length) clearInterval(intervalo);
+
+      if (i > textoCompleto.length) {
+        clearInterval(intervalo);
+      }
     }, 20);
   };
 
   const consultarIA = async (e) => {
     e.preventDefault();
-    if (!mensaje.trim()) return;
+    if (!mensaje.trim() || cargando) return;
 
     const userMsg = { tipo: "user", texto: mensaje };
     const botMsg = { tipo: "bot", texto: "" };
@@ -47,6 +55,7 @@ const AsistenteMokaya = () => {
       });
 
       const data = await res.json();
+
       const texto =
         data.response ||
         "El sommelier está en la cava 🍷. Intentá nuevamente.";
@@ -59,89 +68,140 @@ const AsistenteMokaya = () => {
     }
   };
 
-  const styles = {
-    container: {
-      maxWidth: "750px",
-      margin: "60px auto",
-      padding: "30px",
-      background: "linear-gradient(145deg, #fdf8f3, #f7efe9)",
-      borderRadius: "20px",
-      boxShadow: "0 20px 50px rgba(0,0,0,0.08)",
-      display: "flex",
-      flexDirection: "column",
-      height: "80vh",
-    },
-    chatBox: {
-      flex: 1,
-      overflowY: "auto",
-      padding: "10px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "10px",
-    },
-    bubbleUser: {
-      alignSelf: "flex-end",
-      background: "#4a2c2a",
-      color: "#fff",
-      padding: "10px 15px",
-      borderRadius: "15px 15px 5px 15px",
-      maxWidth: "70%",
-    },
-    bubbleBot: {
-      alignSelf: "flex-start",
-      background: "#fff",
-      color: "#4e342e",
-      padding: "10px 15px",
-      borderRadius: "15px 15px 15px 5px",
-      maxWidth: "70%",
-      border: "1px solid #eee",
-    },
-    form: {
-      display: "flex",
-      gap: "10px",
-      marginTop: "10px",
-    },
-    input: {
-      flex: 1,
-      padding: "12px",
-      borderRadius: "10px",
-      border: "1px solid #ddd",
-      outline: "none",
-    },
-    button: {
-      background: "#4a2c2a",
-      color: "#fff",
-      border: "none",
-      padding: "12px 18px",
-      borderRadius: "10px",
-      cursor: "pointer",
-    },
-  };
-
   return (
-    <section style={styles.container}>
-      <div ref={chatRef} style={styles.chatBox}>
-        {chat.map((msg, i) => (
+    <section
+      className="py-12 md:py-20 px-4 md:px-12"
+      style={{ backgroundColor: theme.background }}
+    >
+      <div className="max-w-5xl mx-auto">
+        {/* 🔹 ANTETÍTULO */}
+        <div className="flex items-center space-x-2 mb-4">
           <div
-            key={i}
-            style={msg.tipo === "user" ? styles.bubbleUser : styles.bubbleBot}
+            className="w-8 h-[2px]"
+            style={{ backgroundColor: theme.primary }}
+          />
+          <span
+            className="uppercase tracking-[0.3em] text-xs font-bold"
+            style={{ color: theme.primary }}
           >
-            {msg.texto || (cargando && msg.tipo === "bot" && "...")}
-          </div>
-        ))}
-      </div>
+            Experiencia Sensorial
+          </span>
+        </div>
 
-      <form onSubmit={consultarIA} style={styles.form}>
-        <input
-          value={mensaje}
-          onChange={(e) => setMensaje(e.target.value)}
-          placeholder="Preguntá sobre chocolates, maridajes..."
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>
-          Enviar
-        </button>
-      </form>
+        {/* 🔹 TÍTULO */}
+        <h2
+          className="text-4xl md:text-5xl font-bold leading-tight mb-4"
+          style={{
+            color: theme.text,
+            fontFamily: "'Playfair Display', serif",
+          }}
+        >
+          Consultá a nuestro{" "}
+          <span style={{ color: theme.primary }}>Sommelier</span>
+        </h2>
+
+        {/* 🔹 TEXTO */}
+        <p
+          className="text-base md:text-lg leading-relaxed opacity-80 mb-8 max-w-2xl"
+          style={{ color: theme.text }}
+        >
+          Descubrí combinaciones únicas, maridajes perfectos y los secretos
+          detrás de nuestros chocolates artesanales. Nuestro sommelier te guía
+          en una experiencia pensada para todos los sentidos.
+        </p>
+
+        {/* 💬 CHAT */}
+        <div
+          className="rounded-2xl shadow-lg flex flex-col"
+          style={{
+            backgroundColor: "#fff",
+            border: "1px solid #eee",
+            height: "500px",
+          }}
+        >
+          {/* mensajes */}
+          <div
+            ref={chatRef}
+            className="flex-1 overflow-y-auto p-4 flex flex-col gap-3"
+          >
+            {chat.map((msg, i) => (
+              <div
+                key={i}
+                className="flex items-end gap-2"
+                style={{
+                  justifyContent:
+                    msg.tipo === "user" ? "flex-end" : "flex-start",
+                }}
+              >
+                {/* Avatar SOLO para bot */}
+                {msg.tipo === "bot" && (
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm"
+                    style={{ backgroundColor: theme.primary }}
+                  >
+                    🍫
+                  </div>
+                )}
+
+                {/* Burbuja */}
+                <div
+                  className="px-4 py-2 rounded-xl max-w-[70%]"
+                  style={
+                    msg.tipo === "user"
+                      ? {
+                          backgroundColor: theme.primary,
+                          color: "#fff",
+                        }
+                      : {
+                          backgroundColor: "#f5f5f5",
+                          color: theme.text,
+                        }
+                  }
+                >
+                  {msg.texto ||
+                    (!msg.texto && msg.tipo === "bot" && (
+                      <div className="flex gap-1">
+                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* input */}
+          <form
+            onSubmit={consultarIA}
+            className="flex gap-2 p-3 border-t"
+            style={{ borderColor: "#eee" }}
+          >
+            <input
+              value={mensaje}
+              onChange={(e) => setMensaje(e.target.value)}
+              placeholder="Ej: ¿Qué chocolate combina con un Malbec?"
+              className="flex-1 px-4 py-2 rounded-lg outline-none"
+              style={{
+                border: "1px solid #ddd",
+                color: theme.text,
+              }}
+            />
+
+            <button
+              type="submit"
+              disabled={cargando}
+              className="px-4 py-2 rounded-lg font-semibold disabled:opacity-50"
+              style={{
+                backgroundColor: theme.primary,
+                color: "#fff",
+              }}
+            >
+              {cargando ? "..." : "Enviar"}
+            </button>
+          </form>
+        </div>
+      </div>
     </section>
   );
 };
