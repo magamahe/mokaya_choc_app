@@ -20,7 +20,7 @@ const Testimonials = lazy(() => import("./components/Testimonials"));
 const Features = lazy(() => import("./components/Features"));
 const Contact = lazy(() => import("./components/Contact"));
 const ChocolateSecrets = lazy(() => import("./components/ChocolateSecrets"));
-
+const AsistenteMokaya = lazy(() => import("./components/AsistenteMokaya"));
 // Páginas
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -79,6 +79,12 @@ const LandingPage = () => {
         </div>
       </section>
 
+      <section id="sommelier">
+        <div className="reveal">
+          <AsistenteMokaya />
+        </div>
+      </section>
+      
       <section id="nosotros">
         <div className="reveal">
           <AboutUs />

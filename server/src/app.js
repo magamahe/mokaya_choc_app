@@ -3,6 +3,7 @@ const connectDB = require('./config/db');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const chatRoutes = require("./routes/chat.routes");
 require('dotenv').config();
 
 const app = express(); 
@@ -40,6 +41,7 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 
+app.use('/api', chatRoutes); 
 // =========================
 // TEST API
 // =========================
