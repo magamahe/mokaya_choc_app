@@ -151,7 +151,7 @@ const AsistenteMokaya = () => {
                           backgroundColor: darkMode
                             ? "#2a2a2a"
                             : "#f1f1f1",
-                          color: darkMode ? "#f5f5f5" : "#2c2c2c",, 
+                          color: darkMode ? "#f5f5f5" : "#2c2c2c", 
                         }
                   }
                 >
