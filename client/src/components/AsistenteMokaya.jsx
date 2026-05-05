@@ -144,13 +144,14 @@ const AsistenteMokaya = () => {
                     msg.tipo === "user"
                       ? {
                           backgroundColor: theme.primary,
-                          color: "#ffffff", // 🔥 SIEMPRE visible
+                          color: "#ffffff", 
+                          fontWeight: 500,
                         }
                       : {
                           backgroundColor: darkMode
                             ? "#2a2a2a"
                             : "#f1f1f1",
-                          color: "#2c2c2c", // 🔥 oscuro fijo
+                          color: darkMode ? "#f5f5f5" : "#2c2c2c",, 
                         }
                   }
                 >
