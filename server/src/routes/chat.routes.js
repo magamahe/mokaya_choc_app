@@ -5,7 +5,7 @@ const Groq = require("groq-sdk");
 // Configuración de Groq
 // Es mejor usar process.env para la seguridad, pero para probar puedes poner el string
 const groq = new Groq({ 
-    apiKey: process.env.GROQ_API_KEY || 'TU_API_KEY_AQUÍ' 
+    apiKey: process.env.GROQ_API_KEY
 });
 
 router.post("/chat", async (req, res) => {
@@ -33,6 +33,7 @@ router.post("/chat", async (req, res) => {
         res.json({ response: chatCompletion.choices[0].message.content });
     } catch (error) {
         console.error("Error en el servidor de Groq:", error);
+        console.error("ERROR DETALLADO DE GROQ:", error.message); 
         res.status(500).json({ error: "El Sommelier está tomando un descanso. Intenta más tarde." });
     }
 });

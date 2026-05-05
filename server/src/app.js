@@ -3,9 +3,9 @@ const connectDB = require('./config/db');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
-const chatRoutes = require("./routes/chat.routes");
-require('dotenv').config();
 
+require('dotenv').config();
+const chatRoutes = require("./routes/chat.routes");
 const app = express(); 
 
 // DB
