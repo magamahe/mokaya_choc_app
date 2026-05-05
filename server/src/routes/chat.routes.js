@@ -27,7 +27,7 @@ router.post("/chat", async (req, res) => {
                     content: prompt,
                 },
             ],
-            model: "llama3-8b-8192",
+            model: "llama-3.3-70b-versatile",
         });
 
         res.json({ response: chatCompletion.choices[0].message.content });
