@@ -1,6 +1,7 @@
 <p align="center">
   <img src="./client/public/readme.png" alt="MOKAYA Banner" width="100%">
 </p>
+
 # Mokaya -- Full Stack E-commerce
 
 **Mokaya** es una plataforma de e-commerce de chocolates de autor,
