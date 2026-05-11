@@ -152,5 +152,5 @@ María Gabriela Martínez H. Data Analyst & Full Stack Developer
 Proyecto desarrollado como trabajo final de la cátedra **Back-End en ADA**
 
 <p align="center">
-  <img src="[src/assets/images/readme/adalogo.png](https://ada.fonselp.com/assets/logo-OsHfGzMh.png)" width="80"/>
+  <img src="https://ada.fonselp.com/assets/logo-OsHfGzMh.png" width="80"/>
 </p>
